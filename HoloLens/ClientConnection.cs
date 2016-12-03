@@ -9,15 +9,9 @@ namespace Lightsaber.HoloLens
 {
 	public class ClientConnection
 	{
-		TcpSocketClient socketClient;
-		readonly Dictionary<string, BaseDto> objectsToSend = new Dictionary<string, BaseDto>();
+		UdpSocketClient socketClient;
 		Dictionary<Type, Action<object>> callbacks = new Dictionary<Type, Action<object>>();
-
-		/// <summary>
-		/// Fired when conneciton is closed.
-		/// </summary>
-		public event Action Disconnected;
-
+		
 		/// <summary>
 		/// Is connected to uwp/android/ios app
 		/// </summary>
@@ -33,102 +27,34 @@ namespace Lightsaber.HoloLens
 		{
 			try
 			{
-				socketClient = new TcpSocketClient();
-				socketClient.Socket.Control.NoDelay = true;
-				//socketClient.Socket.Control.OutboundBufferSizeInBytes = 32;
-				socketClient.Socket.Control.QualityOfService = Windows.Networking.Sockets.SocketQualityOfService.LowLatency;
-
+				// if you need a duplex TCP sample, take a look at SmartHome sample
+				socketClient = new UdpSocketClient();
+				socketClient.MessageReceived += SocketClient_MessageReceived;
 				Serializer = new ProtobufNetworkSerializer();
 				await socketClient.ConnectAsync(ip, port);
+				await socketClient.SendAsync(Serializer.Serialize(new HandshakeDto { Message = "Hello!" }));
 				Connected = true;
-				Task.Run(() => StartListening());
 			}
 			catch (Exception)
 			{
 				return false;
 			}
-			StartSendingData();
 			return true;
 		}
 
-		void StartListening()
+		void SocketClient_MessageReceived(object sender, Sockets.Plugin.Abstractions.UdpSocketMessageReceivedEventArgs e)
 		{
-			try
-			{
-				Serializer.ObjectDeserialized += OnObjectDeserialized;
-				Serializer.ReadFromStream(socketClient.ReadStream);
-			}
-			catch (Exception exc)
-			{
-			}
-		}
-
-		void OnObjectDeserialized(BaseDto obj)
-		{
-			if (obj == null)
-				return;
-
+			var dto = Serializer.Deserialize<BaseDto>(e.ByteData);
+			Action<object> callback;
 			lock (callbacks)
-			{
-				Action<object> callback;
-				if (callbacks.TryGetValue(obj.GetType(), out callback))
-				{
-					callback(obj);
-				}
-			}
+				callbacks.TryGetValue(dto.GetType(), out callback);
+			callback?.Invoke(dto);
 		}
 
 		public void RegisterFor<T>(Action<T> callback)
 		{
 			lock (callbacks)
-			{
-				callbacks[typeof(T)] = obj => callback((T)obj);
-			}
-		}
-
-		public void SendObject(string id, BaseDto dto)
-		{
-			lock (objectsToSend)
-				objectsToSend[id] = dto;
-		}
-
-		public void SendObject(BaseDto dto)
-		{
-			SendObject(Guid.NewGuid().ToString(), dto);
-		}
-
-		async void StartSendingData()
-		{
-			try
-			{
-				await Task.Run(async () =>
-				{
-					while (true)
-					{
-						List<BaseDto> objects;
-
-						lock (objectsToSend)
-						{
-							objects = objectsToSend.Values.ToList();
-							objectsToSend.Clear();
-						}
-
-						if (objects.Count > 0)
-						{
-							foreach (var item in objects)
-							{
-								Serializer.WriteToStream(socketClient.WriteStream, item);
-							}
-						}
-						await Task.Delay(20);
-					}
-				});
-			}
-			catch (Exception exc)
-			{
-				Connected = false;
-				Disconnected?.Invoke();
-			}
+				callbacks[typeof(T)] = obj => callback((T) obj);
 		}
 	}
 }

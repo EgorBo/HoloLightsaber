@@ -5,6 +5,7 @@ namespace Shared
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 	[ProtoInclude(100, typeof(MotionDto))]
 	[ProtoInclude(200, typeof(ColorChangedDto))]
+	[ProtoInclude(300, typeof(HandshakeDto))]
 	public class BaseDto { }
 	
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
@@ -19,8 +20,12 @@ namespace Shared
 		public Vector3Dto Color { get; set; }
 	}
 
-
-
+	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
+	public class HandshakeDto : BaseDto
+	{
+		public string Message { get; set; }
+	}
+	
 
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 	public struct Vector3Dto

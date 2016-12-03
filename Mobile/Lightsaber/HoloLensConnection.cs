@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shared;
 using Sockets.Plugin;
-using Sockets.Plugin.Abstractions;
 
 namespace Lightsaber
 {
 	public class HoloLensConnection
 	{
 		const int Port = 5206;
-		TcpSocketListener listener;
-		ITcpSocketClient client;
-		Dictionary<Type, Action<object>> callbacks = new Dictionary<Type, Action<object>>();
+		UdpSocketReceiver listener;
+
+		string remoteAddress;
+		string remotePort;
 
 		public INetworkSerializer Serializer { get; private set; }
 
@@ -21,42 +20,28 @@ namespace Lightsaber
 		{
 			Serializer = new ProtobufNetworkSerializer();
 			var tcs = new TaskCompletionSource<bool>();
-			listener = new TcpSocketListener(16);
-			listener.ConnectionReceived += (s, e) =>
-			{
-				Serializer.ObjectDeserialized += SimpleNetworkSerializerObjectDeserialized;
-				tcs.TrySetResult(true);
-				client = e.SocketClient;
-				try
+			listener = new UdpSocketReceiver();
+			listener.MessageReceived += (s, e) =>
 				{
-					Serializer.ReadFromStream(client.ReadStream);
-				}
-				catch (Exception exc)
-				{
-					//show error?
-				}
-			};
+					remoteAddress = e.RemoteAddress;
+					remotePort = e.RemotePort;
+
+					var dto = Serializer.Deserialize<BaseDto>(e.ByteData);
+					tcs.TrySetResult(true);
+				};
 			await listener.StartListeningAsync(Port);
 			await tcs.Task;
 		}
-
+		
 		public async void Send(BaseDto dto)
 		{
 			try
 			{
-				await Serializer.WriteToStreamAsync(client.WriteStream, dto);
+				await listener.SendToAsync(Serializer.Serialize(dto), remoteAddress, int.Parse(remotePort));
 			}
 			catch (Exception exc)
 			{
 				//show error?
-			}
-		}
-
-		public void RegisterFor<T>(Action<T> callback)
-		{
-			lock (callbacks)
-			{
-				callbacks[typeof(T)] = obj => callback((T) obj);
 			}
 		}
 
@@ -65,21 +50,6 @@ namespace Lightsaber
 			var interfaces = await CommsInterface.GetAllInterfacesAsync();
 			//TODO: check if any
 			return interfaces.Last(i => !i.IsLoopback && i.IsUsable).IpAddress + ":" + Port;
-		}
-
-		void SimpleNetworkSerializerObjectDeserialized(object obj)
-		{
-			if (obj == null)
-				return;
-
-			lock (callbacks)
-			{
-				Action<object> callback;
-				if (callbacks.TryGetValue(obj.GetType(), out callback))
-				{
-					callback(obj);
-				}
-			}
 		}
 	}
 }
