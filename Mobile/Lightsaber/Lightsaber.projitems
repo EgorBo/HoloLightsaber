@@ -14,5 +14,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)MotionDetector.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)QrPage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)ScannerConnection.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)MotionTestPage.cs" />
   </ItemGroup>
 </Project>

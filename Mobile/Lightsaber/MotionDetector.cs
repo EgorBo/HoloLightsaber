@@ -16,7 +16,7 @@ namespace Lightsaber
 			headTracker.StartTracking();
 		}
 
-		public Vector4Dto GetLastQuaternion()
+		public Vector3Dto GetLastNormal()
 		{
 			var view = new float[16];
 			headTracker.GetLastHeadView(view, 0);
@@ -26,7 +26,8 @@ namespace Lightsaber
 				view[8],  view[9],  view[10], view[11],
 				view[12], view[13], view[14], view[15]);
 			var rot = m4.Rotation;
-			return new Vector4Dto(-rot.X, -rot.Y, rot.Z, rot.W);
+			return new Vector3Dto();
+			//return new Vector4Dto(-rot.X, -rot.Y, rot.Z, rot.W);
 		}
 	}
 }
@@ -52,10 +53,14 @@ namespace Lightsaber
 			tcs = null;
 		}
 
-		public Vector4Dto GetLastQuaternion()
+		public Vector3Dto GetLastNormal()
 		{
 			var q = manager.DeviceMotion.Attitude.Quaternion;
-			return new Vector4Dto((float)q.x, (float)q.y, (float)q.z, (float)q.w);
+			var quat = new Quaternion((float)q.x, (float)q.y, (float)q.z, (float)q.w);
+			var conjugate = new Quaternion((float)-q.x, (float)-q.y, (float)-q.z, (float)q.w);
+			quat = quat * new Quaternion(0, 0, 1, 0);
+			quat = quat * conjugate;
+			return new Vector3Dto(-quat.X, -quat.Z, -quat.Y);
 		}
 	}
 }

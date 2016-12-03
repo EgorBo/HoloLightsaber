@@ -47,7 +47,7 @@ namespace Lightsaber
 			while (true)
 			{
 				await Task.Delay(10);
-				connection?.Send(new MotionDto { Rotation = motionDetector.GetLastQuaternion() });
+				connection?.Send(new MotionDto { Normal = motionDetector.GetLastNormal() });
 			}
 		}
 

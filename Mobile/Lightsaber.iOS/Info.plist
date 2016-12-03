@@ -9,7 +9,7 @@
 	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -23,7 +23,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Lightsaber</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.yourcompany.Lightsaber</string>
+	<string>foo.oooopp</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CFBundleIconFiles</key>
