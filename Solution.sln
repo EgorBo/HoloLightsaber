@@ -3,23 +3,25 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lightsaber", "Clients\Lightsaber\Lightsaber.shproj", "{20213F5F-7F2E-42AC-8634-71CE12A234C3}"
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Lightsaber", "Mobile\Lightsaber\Lightsaber.shproj", "{20213F5F-7F2E-42AC-8634-71CE12A234C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.Droid", "Clients\Lightsaber.Droid\Lightsaber.Droid.csproj", "{41E8E38D-BAD5-4156-A650-B4A485278C9D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.Droid", "Mobile\Lightsaber.Droid\Lightsaber.Droid.csproj", "{41E8E38D-BAD5-4156-A650-B4A485278C9D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.iOS", "Clients\Lightsaber.iOS\Lightsaber.iOS.csproj", "{E2D48E7D-FBE7-4ECF-A9CE-09DAE3B8766B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.iOS", "Mobile\Lightsaber.iOS\Lightsaber.iOS.csproj", "{E2D48E7D-FBE7-4ECF-A9CE-09DAE3B8766B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.HoloLens", "Scanner\Lightsaber.HoloLens.csproj", "{927CECF1-C123-40D3-B17C-51FEC3CFB5CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lightsaber.HoloLens", "HoloLens\Lightsaber.HoloLens.csproj", "{927CECF1-C123-40D3-B17C-51FEC3CFB5CF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{39ADD77B-430A-4851-87FA-6E3ED5A8673F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mobile", "Mobile", "{39ADD77B-430A-4851-87FA-6E3ED5A8673F}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Scanner", "Scanner", "{2E39972A-3765-43BB-B905-C6B1B5B0F2A5}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HoloLens", "HoloLens", "{2E39972A-3765-43BB-B905-C6B1B5B0F2A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{F55ADE4B-08FE-4AEA-B08A-3A793D149C42}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		Clients\Lightsaber\Lightsaber.projitems*{20213f5f-7f2e-42ac-8634-71ce12a234c3}*SharedItemsImports = 13
+		Mobile\Lightsaber\Lightsaber.projitems*{20213f5f-7f2e-42ac-8634-71ce12a234c3}*SharedItemsImports = 13
+		Mobile\Lightsaber\Lightsaber.projitems*{41e8e38d-bad5-4156-a650-b4a485278c9d}*SharedItemsImports = 4
+		Mobile\Lightsaber\Lightsaber.projitems*{e2d48e7d-fbe7-4ecf-a9ce-09dae3b8766b}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
