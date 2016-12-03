@@ -65,7 +65,7 @@ namespace Lightsaber.HoloLens
 		void OnMotion(MotionDto e)
 		{
 			if (handleNode == null) return;
-			InvokeOnMain(() => handleNode.Rotation = new Quaternion(e.EulerAngles.X, e.EulerAngles.Y, e.EulerAngles.Z));
+			InvokeOnMain(() => handleNode.Rotation = new Quaternion(e.Rotation.X, e.Rotation.Y, e.Rotation.Z, e.Rotation.W));
 		}
 
 		public async Task<bool> ConnectAsync()

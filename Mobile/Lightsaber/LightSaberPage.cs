@@ -47,7 +47,7 @@ namespace Lightsaber
 			while (true)
 			{
 				await Task.Delay(20);
-				connection?.Send(new MotionDto { EulerAngles = motionDetector.GetEulerAngles() });
+				connection?.Send(new MotionDto { Rotation = motionDetector.GetRotation() });
 			}
 		}
 
