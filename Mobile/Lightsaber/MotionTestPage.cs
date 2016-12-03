@@ -23,16 +23,9 @@ namespace Lightsaber
 		{
 			base.OnAppearing();
 			detector = new MotionDetector();
-			await detector.StartListening();
-
-			while (true)
-			{
-				await Task.Delay(20);
-				var q = detector.GetRotation();
-				Device.BeginInvokeOnMainThread(() => {
-					label.Text = $"{Math.Round(q.X, 1)};  {Math.Round(q.Y, 1)};  {Math.Round(q.Z, 1)}";
-				});
-			}
+			detector.StartListening(rot => 
+				Device.BeginInvokeOnMainThread(() => 
+					label.Text = $"{Math.Round(rot.X, 1)};  {Math.Round(rot.Y, 1)};  {Math.Round(rot.Z, 1)}"));
 		}
 	}
 }

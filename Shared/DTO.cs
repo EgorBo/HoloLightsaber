@@ -10,7 +10,7 @@ namespace Shared
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 	public class MotionDto : BaseDto
 	{
-		public Vector4Dto Rotation { get; set; }
+		public Vector3Dto Rotation { get; set; }
 	}
 
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]

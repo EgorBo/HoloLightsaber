@@ -14,7 +14,7 @@ namespace Lightsaber
 
 		async void Initialize()
 		{
-			var ip = await ScannerConnection.GetLocalIp() ?? "ERROR";
+			var ip = await HoloLensConnection.GetLocalIp() ?? "ERROR";
 			var qrSize = 320;
 			var barcode = new ZXingBarcodeImageView
 			{
@@ -48,7 +48,7 @@ namespace Lightsaber
 			};
 
 			Content = stack;
-			var connection = new ScannerConnection();
+			var connection = new HoloLensConnection();
 			await connection.WaitForCompanion();
 			await Navigation.PushAsync(new LightSaberPage(connection));
 		}

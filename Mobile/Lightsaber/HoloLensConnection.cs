@@ -8,7 +8,7 @@ using Sockets.Plugin.Abstractions;
 
 namespace Lightsaber
 {
-	public class ScannerConnection
+	public class HoloLensConnection
 	{
 		const int Port = 5206;
 		TcpSocketListener listener;

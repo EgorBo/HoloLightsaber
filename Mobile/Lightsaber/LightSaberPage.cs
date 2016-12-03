@@ -7,10 +7,10 @@ namespace Lightsaber
 {
 	public class LightSaberPage : ContentPage
 	{
-		readonly ScannerConnection connection;
+		readonly HoloLensConnection connection;
 		MotionDetector motionDetector;
 
-		public LightSaberPage(ScannerConnection connection)
+		public LightSaberPage(HoloLensConnection connection)
 		{
 			NavigationPage.SetHasNavigationBar(this, false);
 			this.connection = connection;
@@ -43,12 +43,7 @@ namespace Lightsaber
 		protected override async void OnAppearing()
 		{
 			motionDetector = new MotionDetector();
-			await motionDetector.StartListening();
-			while (true)
-			{
-				await Task.Delay(20);
-				connection?.Send(new MotionDto { Rotation = motionDetector.GetRotation() });
-			}
+			motionDetector.StartListening(rot => connection?.Send(new MotionDto { Rotation = rot }));
 		}
 
 		void OnColorClick(object sender, EventArgs eventArgs)
