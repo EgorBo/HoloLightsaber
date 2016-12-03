@@ -1,4 +1,5 @@
 ﻿#if __ANDROID__
+using System.Threading.Tasks;
 using Com.Google.Vrtoolkit.Cardboard.Sensors;
 using Shared;
 using Urho;
@@ -9,7 +10,7 @@ namespace Lightsaber
 	{
 		HeadTracker headTracker;
 
-		public void StartListening()
+		public async Task StartListening()
 		{
 			headTracker = HeadTracker.CreateFromContext(Android.App.Application.Context);
 			headTracker.StartTracking();
@@ -30,6 +31,7 @@ namespace Lightsaber
 	}
 }
 #elif __IOS__
+using System.Threading.Tasks;
 using CoreMotion;
 using Shared;
 using Urho;
@@ -40,10 +42,14 @@ namespace Lightsaber
 	{
 		CMMotionManager manager;
 
-		public void StartListening()
+		public async Task StartListening()
 		{
+			var tcs = new TaskCompletionSource<bool>();
 			manager = new CMMotionManager();
-			manager.StartDeviceMotionUpdates(Foundation.NSOperationQueue.CurrentQueue, (motion, error) => { });
+			manager.StartAccelerometerUpdates();
+			manager.StartDeviceMotionUpdates(Foundation.NSOperationQueue.CurrentQueue, (motion, error) => { tcs?.TrySetResult(true); });
+			await tcs.Task;
+			tcs = null;
 		}
 
 		public Vector4Dto GetLastQuaternion()

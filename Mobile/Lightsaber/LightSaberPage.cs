@@ -12,6 +12,7 @@ namespace Lightsaber
 
 		public LightSaberPage(ScannerConnection connection)
 		{
+			NavigationPage.SetHasNavigationBar(this, false);
 			this.connection = connection;
 
 			Button redBt = new Button();
@@ -42,7 +43,7 @@ namespace Lightsaber
 		protected override async void OnAppearing()
 		{
 			motionDetector = new MotionDetector();
-			motionDetector.StartListening();
+			await motionDetector.StartListening();
 			while (true)
 			{
 				await Task.Delay(10);
