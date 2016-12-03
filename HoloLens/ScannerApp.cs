@@ -89,7 +89,6 @@ namespace Lightsaber.HoloLens
 
 			if (await clientConnection.ConnectAsync(ip, port))
 			{
-				InvokeOnMain(() => text.Text = "Connected!");
 				InvokeOnMain(() =>
 					{
 						textNode.Remove();
