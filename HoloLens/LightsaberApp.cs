@@ -10,13 +10,13 @@ using Urho.Shapes;
 
 namespace Lightsaber.HoloLens
 {
-	public class ScannerApp : HoloApplication
+	public class LightsaberApp : HoloApplication
 	{
 		Node handleNode;
 		ClientConnection clientConnection;
 		Blade blade;
 
-		public ScannerApp(ApplicationOptions opts) : base(opts) { }
+		public LightsaberApp(ApplicationOptions opts) : base(opts) { }
 
 		protected override async void Start()
 		{
@@ -31,34 +31,41 @@ namespace Lightsaber.HoloLens
 
 			Zone.AmbientColor = new Color(0.4f, 0.4f, 0.4f); // Color.Transparent;
 			DirectionalLight.Brightness = 1f;
+			
+			handleNode = Scene.CreateChild();
+			handleNode.Position = new Vector3(0, 0, 1f);
+			handleNode.Scale = new Vector3(1, 1, 7) / 60;
+			var handleModel = handleNode.CreateComponent<Box>();
+			handleModel.Color = Color.Gray;
 
-			await RegisterCortanaCommands(new Dictionary<string, Action> {
-				{ "stop spatial mapping", StopSpatialMapping}
-			});
+			blade = handleNode.CreateComponent<Blade>();
+			blade.SetColor(Color.Blue);
+
+			var handleRingTop = handleNode.CreateChild();
+			var handleRingTopModel = handleRingTop.CreateComponent<Box>();
+			handleRingTopModel.Color = Color.White;
+			handleRingTop.Scale = new Vector3(1, 1, 1 / 10f) * 1.2f;
+			handleRingTop.Position = new Vector3(0, 0, 0.55f);
+
+			var handleRingBottom = handleNode.CreateChild();
+			var handleRingBottomModel = handleRingBottom.CreateComponent<Box>();
+			handleRingBottomModel.Color = handleRingTopModel.Color;
+			handleRingBottom.Scale = handleRingTop.Scale;
+			handleRingBottom.Position = -handleRingTop.Position;
 
 			while (!await ConnectAsync()) { }
 		}
 
 		void OnColorChanged(ColorChangedDto dto)
 		{
-			if (blade == null)
-				return;
-
-			InvokeOnMain(() =>
-			{
-				blade.SetColor(new Color(dto.Color.X, dto.Color.Y, dto.Color.Z));
-			});
+			if (blade == null) return;
+			InvokeOnMain(() => blade.SetColor(new Color(dto.Color.X, dto.Color.Y, dto.Color.Z)));
 		}
 
 		void OnMotion(MotionDto e)
 		{
-			if (handleNode == null)
-				return;
-
-			InvokeOnMain(() =>
-			{
-				handleNode.Rotation = new Quaternion(e.Rotation.X, e.Rotation.Y, e.Rotation.Z, e.Rotation.W);
-			});
+			if (handleNode == null) return;
+			InvokeOnMain(() => handleNode.Rotation = new Quaternion(e.EulerAngles.X, e.EulerAngles.Y, e.EulerAngles.Z));
 		}
 
 		public async Task<bool> ConnectAsync()
@@ -89,31 +96,7 @@ namespace Lightsaber.HoloLens
 
 			if (await clientConnection.ConnectAsync(ip, port))
 			{
-				InvokeOnMain(() =>
-					{
-						textNode.Remove();
-
-						handleNode = Scene.CreateChild();
-						handleNode.Position = new Vector3(0, 0, 1f);
-						handleNode.Scale = new Vector3(7, 1, 1) / 60;
-						var handleModel = handleNode.CreateComponent<Box>();
-						handleModel.Color = Color.Gray;
-
-						blade = handleNode.CreateComponent<Blade>();
-						blade.SetColor(Color.Blue);
-
-						var handleRingTop = handleNode.CreateChild();
-						var handleRingTopModel = handleRingTop.CreateComponent<Box>();
-						handleRingTopModel.Color = Color.White;
-						handleRingTop.Scale = new Vector3(1 / 10f, 1, 1) * 1.2f;
-						handleRingTop.Position = new Vector3(0.55f, 0, 0);
-
-						var handleRingBottom = handleNode.CreateChild();
-						var handleRingBottomModel = handleRingBottom.CreateComponent<Box>();
-						handleRingBottomModel.Color = handleRingTopModel.Color;
-						handleRingBottom.Scale = handleRingTop.Scale;
-						handleRingBottom.Position = -handleRingTop.Position;
-					});
+				InvokeOnMain(() => textNode.Remove());
 				return true;
 			}
 			return false;
@@ -155,15 +138,15 @@ namespace Lightsaber.HoloLens
 			base.OnAttachedToNode(node);
 
 			var bladeNode = node.CreateChild();
-			bladeNode.Position = new Vector3(2.5f, 0f, 0);
-			bladeNode.Scale = new Vector3(7, 1, 1) / 1.75f;
+			bladeNode.Position = new Vector3(0f, 0f, 2.5f);
+			bladeNode.Scale = new Vector3(1, 1, 7) / 1.75f;
 			var bladeModel = bladeNode.CreateComponent<StaticModel>();
 			bladeModel.Model = CoreAssets.Models.Box;
 			bladeModel.SetMaterial(Material.FromColor(Color.White));
 
 			var glowNode = bladeNode.CreateChild();
-			glowNode.Scale = new Vector3(1, 3f, 3f);
-			glowNode.Position = new Vector3(0.02f, 0, 0);
+			glowNode.Scale = new Vector3(3f, 3f, 1f);
+			glowNode.Position = new Vector3(0.02f, 0, 0.02f);
 			glowModel = glowNode.CreateComponent<Box>();
 			glowModel.Color = new Color(0, 1, 0, 0.5f);
 		}

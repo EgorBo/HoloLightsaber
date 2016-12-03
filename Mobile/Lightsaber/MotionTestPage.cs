@@ -28,7 +28,7 @@ namespace Lightsaber
 			while (true)
 			{
 				await Task.Delay(20);
-				var q = detector.GetLastNormal();
+				var q = detector.GetEulerAngles();
 				Device.BeginInvokeOnMainThread(() => {
 					label.Text = $"{Math.Round(q.X, 1)};  {Math.Round(q.Y, 1)};  {Math.Round(q.Z, 1)}";
 				});

@@ -10,7 +10,6 @@ namespace Lightsaber.HoloLens
 	public class ClientConnection
 	{
 		TcpSocketClient socketClient;
-		Func<BaseDto> dtoRealTimeCallback;
 		readonly Dictionary<string, BaseDto> objectsToSend = new Dictionary<string, BaseDto>();
 		Dictionary<Type, Action<object>> callbacks = new Dictionary<Type, Action<object>>();
 
@@ -35,6 +34,10 @@ namespace Lightsaber.HoloLens
 			try
 			{
 				socketClient = new TcpSocketClient();
+				socketClient.Socket.Control.NoDelay = true;
+				//socketClient.Socket.Control.OutboundBufferSizeInBytes = 32;
+				socketClient.Socket.Control.QualityOfService = Windows.Networking.Sockets.SocketQualityOfService.LowLatency;
+
 				Serializer = new ProtobufNetworkSerializer();
 				await socketClient.ConnectAsync(ip, port);
 				Connected = true;
@@ -94,11 +97,6 @@ namespace Lightsaber.HoloLens
 			SendObject(Guid.NewGuid().ToString(), dto);
 		}
 
-		public void RegisterForRealtimeUpdate(Func<BaseDto> callback)
-		{
-			dtoRealTimeCallback = callback;
-		}
-
 		async void StartSendingData()
 		{
 			try
@@ -107,25 +105,20 @@ namespace Lightsaber.HoloLens
 				{
 					while (true)
 					{
-						List<BaseDto> surfacesToSend;
+						List<BaseDto> objects;
 
 						lock (objectsToSend)
 						{
-							surfacesToSend = objectsToSend.Values.ToList();
+							objects = objectsToSend.Values.ToList();
 							objectsToSend.Clear();
 						}
 
-						if (surfacesToSend.Count > 0)
+						if (objects.Count > 0)
 						{
-							foreach (var surface in surfacesToSend)
+							foreach (var item in objects)
 							{
-								Serializer.WriteToStream(socketClient.WriteStream, dtoRealTimeCallback());
-								Serializer.WriteToStream(socketClient.WriteStream, surface);
+								Serializer.WriteToStream(socketClient.WriteStream, item);
 							}
-						}
-						else
-						{
-							Serializer.WriteToStream(socketClient.WriteStream, dtoRealTimeCallback());
 						}
 						await Task.Delay(20);
 					}

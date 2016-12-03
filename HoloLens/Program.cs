@@ -13,6 +13,6 @@ namespace Lightsaber.HoloLens
 		/// Defines the entry point of the application.
 		/// </summary>
 		[MTAThread]
-		private static void Main() => CoreApplication.Run(new UrhoAppViewSource<ScannerApp>(new ApplicationOptions("Data")));
+		private static void Main() => CoreApplication.Run(new UrhoAppViewSource<LightsaberApp>(new ApplicationOptions("Data")));
 	}
 }

@@ -21,7 +21,7 @@ namespace Lightsaber
 		{
 			Serializer = new ProtobufNetworkSerializer();
 			var tcs = new TaskCompletionSource<bool>();
-			listener = new TcpSocketListener();
+			listener = new TcpSocketListener(32);
 			listener.ConnectionReceived += (s, e) =>
 			{
 				Serializer.ObjectDeserialized += SimpleNetworkSerializerObjectDeserialized;

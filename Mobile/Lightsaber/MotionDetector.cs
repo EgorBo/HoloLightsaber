@@ -16,7 +16,7 @@ namespace Lightsaber
 			headTracker.StartTracking();
 		}
 
-		public Vector3Dto GetLastNormal()
+		public Vector3Dto GetEulerAngles()
 		{
 			var view = new float[16];
 			headTracker.GetLastHeadView(view, 0);
@@ -53,7 +53,7 @@ namespace Lightsaber
 			tcs = null;
 		}
 
-		public Vector3Dto GetLastNormal()
+		public Vector3Dto GetEulerAngles()
 		{
 			var q = manager.DeviceMotion.Attitude.Quaternion;
 			var quat = new Quaternion((float)q.x, (float)q.y, (float)q.z, (float)q.w);
