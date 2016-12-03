@@ -21,7 +21,7 @@ namespace Lightsaber
 		{
 			Serializer = new ProtobufNetworkSerializer();
 			var tcs = new TaskCompletionSource<bool>();
-			listener = new TcpSocketListener(32);
+			listener = new TcpSocketListener(16);
 			listener.ConnectionReceived += (s, e) =>
 			{
 				Serializer.ObjectDeserialized += SimpleNetworkSerializerObjectDeserialized;
@@ -40,11 +40,11 @@ namespace Lightsaber
 			await tcs.Task;
 		}
 
-		public void Send(BaseDto dto)
+		public async void Send(BaseDto dto)
 		{
 			try
 			{
-				Serializer.WriteToStream(client.WriteStream, dto);
+				await Serializer.WriteToStreamAsync(client.WriteStream, dto);
 			}
 			catch (Exception exc)
 			{

@@ -34,6 +34,8 @@ namespace Lightsaber
 				{
 					Orientation = StackOrientation.Horizontal,
 					HorizontalOptions = LayoutOptions.FillAndExpand,
+					VerticalOptions = LayoutOptions.Center,
+					HeightRequest = 200,
 					Children = { redBt, greenBt, blueBt }
 				};
 

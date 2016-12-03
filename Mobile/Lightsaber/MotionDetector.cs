@@ -1,5 +1,4 @@
 ﻿#if __ANDROID__
-using System.Threading.Tasks;
 using Com.Google.Vrtoolkit.Cardboard.Sensors;
 using Shared;
 using Urho;
@@ -37,7 +36,6 @@ namespace Lightsaber
 	}
 }
 #elif __IOS__
-using System.Threading.Tasks;
 using CoreMotion;
 using Shared;
 using Urho;
@@ -51,20 +49,17 @@ namespace Lightsaber
 		Action<Vector3Dto> listener;
 		DateTime lastUpdate;
 
-		public void StartListening(Action<Vector3Dto> listener)
+		public async void StartListening(Action<Vector3Dto> listener)
 		{
 			this.listener = listener;
 			manager = new CMMotionManager();
-			manager.StartDeviceMotionUpdates(Foundation.NSOperationQueue.CurrentQueue, async (motion, error) =>
+			manager.StartDeviceMotionUpdates(Foundation.NSOperationQueue.CurrentQueue, (motion, error) =>
 			{
-				var last = DateTime.UtcNow - lastUpdate;
-				if (last.Milliseconds < 16);
-					await Task.Delay(16 - last.Milliseconds).ConfigureAwait(false);
-
+				var duration = DateTime.UtcNow - lastUpdate;
 				var att = manager.DeviceMotion.Attitude;
 				listener(new Vector3Dto(
-					MathHelper.DegreesToRadians((float)-att.Pitch),
-					MathHelper.DegreesToRadians((float)-att.Yaw),
+					MathHelper.RadiansToDegrees((float)-att.Pitch),
+					MathHelper.RadiansToDegrees((float)-att.Yaw),
 					0));
 				lastUpdate = DateTime.UtcNow;
 			});

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using ProtoBuf;
 using ProtoBuf.Meta;
 
@@ -29,6 +30,13 @@ namespace Shared
 			var bytes = Serialize(dto);
 			stream.Write(bytes, 0, bytes.Length);
 			stream.Flush();
+		}
+
+		public Task WriteToStreamAsync(Stream stream, BaseDto dto)
+		{
+			var bytes = Serialize(dto);
+			stream.Write(bytes, 0, bytes.Length);
+			return stream.FlushAsync();
 		}
 
 		public byte[] Serialize(BaseDto dto)
