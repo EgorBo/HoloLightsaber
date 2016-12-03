@@ -33,7 +33,7 @@ namespace Lightsaber.HoloLens
 			DirectionalLight.Brightness = 1f;
 			
 			handleNode = Scene.CreateChild();
-			handleNode.Position = new Vector3(0, 0, 1f);
+			handleNode.Position = new Vector3(0, 0, 1.5f);
 			handleNode.Scale = new Vector3(1, 1, 7) / 60;
 			var handleModel = handleNode.CreateComponent<Box>();
 			handleModel.Color = Color.Gray;
@@ -52,6 +52,7 @@ namespace Lightsaber.HoloLens
 			handleRingBottomModel.Color = handleRingTopModel.Color;
 			handleRingBottom.Scale = handleRingTop.Scale;
 			handleRingBottom.Position = -handleRingTop.Position;
+			blade.Toggle();
 
 			while (!await ConnectAsync()) { }
 		}
@@ -127,19 +128,30 @@ namespace Lightsaber.HoloLens
 		[Preserve] public Blade(IntPtr ptr) : base(ptr) { ReceiveSceneUpdates = true; }
 
 		Box glowModel;
+		Node bladeNode;
 
 		public void SetColor(Color c)
 		{
+			Toggle();
 			glowModel.GetMaterial(0).SetShaderParameter("MatDiffColor", new Color(c, 0.4f));
+		}
+
+		public void Toggle()
+		{
+			var to = new Vector3(1, 1, 7) / 1.75f;
+			bladeNode.Scale = new Vector3(1, 1, 0.1f) / 1.75f;
+			bladeNode.Position = new Vector3(0f, 0f, 0.6f);
+			bladeNode.RunActions(new ScaleTo(0.5f, to.X, to.Y, to.Z));
+			bladeNode.RunActions(new MoveTo(0.5f, new Vector3(0f, 0f, 2.5f)));
 		}
 
 		public override void OnAttachedToNode(Node node)
 		{
 			base.OnAttachedToNode(node);
 
-			var bladeNode = node.CreateChild();
+			bladeNode = node.CreateChild();
 			bladeNode.Position = new Vector3(0f, 0f, 2.5f);
-			bladeNode.Scale = new Vector3(1, 1, 7) / 1.75f;
+			bladeNode.Scale = new Vector3(1, 1, 0.1f) / 1.75f;
 			var bladeModel = bladeNode.CreateComponent<StaticModel>();
 			bladeModel.Model = CoreAssets.Models.Box;
 			bladeModel.SetMaterial(Material.FromColor(Color.White));
