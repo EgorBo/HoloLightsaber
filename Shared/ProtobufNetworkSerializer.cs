@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.IO;
 using ProtoBuf;
-using ProtoBuf.Meta;
 
 namespace Shared
 {
@@ -13,32 +9,6 @@ namespace Shared
 	/// </summary>
 	public class ProtobufNetworkSerializer : INetworkSerializer
 	{
-		public event Action<BaseDto> ObjectDeserialized;
-
-		public void ReadFromStream(Stream stream, CancellationToken token)
-		{
-			RuntimeTypeModel.Default.MetadataTimeoutMilliseconds = 300000;
-			while (!token.IsCancellationRequested)
-			{
-				var obj = Serializer.DeserializeWithLengthPrefix<BaseDto>(stream, PrefixStyle.Base128, fieldNumber: 1);
-				ObjectDeserialized?.Invoke(obj);
-			}
-		}
-
-		public void WriteToStream(Stream stream, BaseDto dto)
-		{
-			var bytes = Serialize(dto);
-			stream.Write(bytes, 0, bytes.Length);
-			stream.Flush();
-		}
-
-		public Task WriteToStreamAsync(Stream stream, BaseDto dto)
-		{
-			var bytes = Serialize(dto);
-			stream.Write(bytes, 0, bytes.Length);
-			return stream.FlushAsync();
-		}
-
 		public byte[] Serialize(BaseDto dto)
 		{
 			using (var ms = new MemoryStream())

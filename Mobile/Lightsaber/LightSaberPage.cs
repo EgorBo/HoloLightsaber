@@ -47,7 +47,7 @@ namespace Lightsaber
 			Content = hStack;
 		}
 
-		protected override async void OnAppearing()
+		protected override void OnAppearing()
 		{
 			motionDetector = new MotionDetector();
 			motionDetector.StartListening(rot => connection?.Send(new MotionDto { Rotation = rot }));

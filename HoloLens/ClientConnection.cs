@@ -12,11 +12,7 @@ namespace Lightsaber.HoloLens
 		UdpSocketClient socketClient;
 		Dictionary<Type, Action<object>> callbacks = new Dictionary<Type, Action<object>>();
 		
-		/// <summary>
-		/// Is connected to uwp/android/ios app
-		/// </summary>
 		public bool Connected { get; private set; }
-
 
 		public INetworkSerializer Serializer { get; set; }
 

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Shared;
 using Urho;
@@ -124,11 +123,13 @@ namespace Lightsaber.HoloLens
 
 	public class Blade : Component
 	{
-		[Preserve] public Blade() { ReceiveSceneUpdates = true; }
-		[Preserve] public Blade(IntPtr ptr) : base(ptr) { ReceiveSceneUpdates = true; }
-
 		Box glowModel;
 		Node bladeNode;
+
+		[Preserve] public Blade() { }
+		[Preserve] public Blade(IntPtr ptr) : base(ptr) { }
+
+		public bool Active { get; private set; }
 
 		public void SetColor(Color c)
 		{
@@ -138,11 +139,16 @@ namespace Lightsaber.HoloLens
 
 		public void Toggle()
 		{
+			Active = !Active;
 			var to = new Vector3(1, 1, 7) / 1.75f;
 			bladeNode.Scale = new Vector3(1, 1, 0.1f) / 1.75f;
 			bladeNode.Position = new Vector3(0f, 0f, 0.6f);
-			bladeNode.RunActions(new ScaleTo(0.5f, to.X, to.Y, to.Z));
-			bladeNode.RunActions(new MoveTo(0.5f, new Vector3(0f, 0f, 2.5f)));
+
+			if (Active)
+			{
+				bladeNode.RunActions(new ScaleTo(0.5f, to.X, to.Y, to.Z));
+				bladeNode.RunActions(new MoveTo(0.5f, new Vector3(0f, 0f, 2.5f)));
+			}
 		}
 
 		public override void OnAttachedToNode(Node node)
@@ -161,11 +167,6 @@ namespace Lightsaber.HoloLens
 			glowNode.Position = new Vector3(0.02f, 0, 0.02f);
 			glowModel = glowNode.CreateComponent<Box>();
 			glowModel.Color = new Color(0, 1, 0, 0.5f);
-		}
-
-		protected override void OnUpdate(float timeStep)
-		{
-			base.OnUpdate(timeStep);
 		}
 	}
 }

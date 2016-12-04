@@ -27,6 +27,11 @@ namespace Lightsaber
 					remotePort = e.RemotePort;
 
 					var dto = Serializer.Deserialize<BaseDto>(e.ByteData);
+					var handshakeDto = dto as HandshakeDto;
+					if (handshakeDto != null)
+					{
+						var msg = handshakeDto.Message;
+					}
 					tcs.TrySetResult(true);
 				};
 			await listener.StartListeningAsync(Port);
