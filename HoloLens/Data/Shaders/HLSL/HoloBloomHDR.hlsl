@@ -103,7 +103,7 @@ void PS(float2 iTexCoord : TEXCOORD0,
 {
     #ifdef BRIGHT
     float3 color = Sample2D(DiffMap, iScreenPos).rgb;
-    oColor = float4(max(color - cBloomHDRThreshold, 0.0), 0.4);
+    oColor = float4(max(color - cBloomHDRThreshold, 0.0), 1.0);
     #endif
 
     #ifndef D3D11
@@ -159,6 +159,9 @@ void PS(float2 iTexCoord : TEXCOORD0,
     #ifdef COMBINE2
     float3 color = Sample2D(DiffMap, iScreenPos).rgb * cBloomHDRMix.x;
     float3 bloom = Sample2D(NormalMap, iTexCoord).rgb * cBloomHDRMix.y;
-    oColor = float4(color + bloom, 0.4);
+    oColor = float4(color + bloom, 1.0);
     #endif
+
+	// how to fill empty space with 0,0,0,0 but don't touch the real "black"?
+	// oColor.a = min(oColor.r + oColor.g + oColor.b, oColor.a);
 }

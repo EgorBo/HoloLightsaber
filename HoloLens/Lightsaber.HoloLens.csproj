@@ -43,9 +43,11 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Data\Fire.xml" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blade.cs" />
     <Compile Include="ClientConnection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,7 +60,9 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\PostProcess\HoloBloomHDR.xml" />
+    <Content Include="Data\PostProcess\HoloBloomHDR.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Data\Shaders\HLSL\HoloBloomHDR.hlsl" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
