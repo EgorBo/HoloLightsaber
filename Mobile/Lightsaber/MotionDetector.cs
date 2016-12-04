@@ -44,22 +44,21 @@ namespace Lightsaber
 	public class MotionDetector
 	{
 		CMMotionManager manager;
-		Action<Vector3Dto> listener;
-		DateTime lastUpdate;
 
-		public async void StartListening(Action<Vector3Dto> listener)
+		public void StartListening(Action<Vector3Dto> listener)
 		{
-			this.listener = listener;
 			manager = new CMMotionManager();
+			if (!manager.DeviceMotionAvailable)
+				throw new InvalidOperationException("DeviceMotion is not available");
+
+			manager.DeviceMotionUpdateInterval = 1 / 60f; // 60fps
 			manager.StartDeviceMotionUpdates(Foundation.NSOperationQueue.CurrentQueue, (motion, error) =>
 			{
-				var duration = DateTime.UtcNow - lastUpdate;
 				var att = manager.DeviceMotion.Attitude;
 				listener(new Vector3Dto(
 					MathHelper.RadiansToDegrees((float)-att.Pitch),
 					MathHelper.RadiansToDegrees((float)-att.Yaw),
 					0));
-				lastUpdate = DateTime.UtcNow;
 			});
 		}
 	}

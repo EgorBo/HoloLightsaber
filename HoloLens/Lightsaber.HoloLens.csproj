@@ -58,14 +58,8 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Materials\RibbonTrail.xml" />
-    <Content Include="Data\Materials\SlashTrail.xml" />
-    <Content Include="Data\PostProcess\Bloom.xml" />
-    <Content Include="Data\PostProcess\BloomHDR.xml" />
-    <Content Include="Data\PostProcess\Blur.xml" />
-    <Content Include="Data\PostProcess\GreyScale.xml" />
-    <Content Include="Data\Textures\RibbonTrail.png" />
-    <Content Include="Data\Textures\SlashTrail.png" />
+    <Content Include="Data\PostProcess\HoloBloomHDR.xml" />
+    <Content Include="Data\Shaders\HLSL\HoloBloomHDR.hlsl" />
     <Content Include="Properties\Default.rd.xml" />
   </ItemGroup>
   <ItemGroup>
