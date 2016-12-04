@@ -12,7 +12,7 @@ namespace Lightsaber.Droid
 {
 	[Activity (Label = "Lightsaber", Icon = "@drawable/icon", MainLauncher = true, 
 		ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
-		ScreenOrientation = ScreenOrientation.Landscape)]
+		ScreenOrientation = ScreenOrientation.Portrait)]
 	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsApplicationActivity
 	{
 		protected override void OnCreate (Bundle bundle)

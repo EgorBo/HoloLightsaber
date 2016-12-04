@@ -19,7 +19,7 @@ namespace Lightsaber.HoloLens
 		public LightsaberApp(ApplicationOptions opts) : base(opts) { }
 		
 		public override void OnGestureManipulationStarted() => manipulationPos = handleNode.Position;
-		public override void OnGestureManipulationUpdated(Vector3 hand) => handleNode.Position = hand * 1.3f + manipulationPos;
+		public override void OnGestureManipulationUpdated(Vector3 hand) => handleNode.Position = hand * 1.5f + manipulationPos;
 		public override Vector3 FocusWorldPoint => handleNode.WorldPosition;
 
 		protected override async void Start()
@@ -29,7 +29,7 @@ namespace Lightsaber.HoloLens
 			//Renderer.HDRRendering = true;
 			//var rp = Renderer.GetViewport(1).RenderPath.Clone();
 			//rp.Append(ResourceCache.GetXmlFile("PostProcess/HoloBloomHDR.xml"));
-			//rp.Append(CoreAssets.PostProcess.FXAA2);
+			////rp.Append(CoreAssets.PostProcess.FXAA2);
 			//Renderer.GetViewport(1).RenderPath = rp;
 			
 			clientConnection = new ClientConnection();
