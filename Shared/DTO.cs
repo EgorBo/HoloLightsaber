@@ -5,7 +5,7 @@ namespace Shared
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
 	[ProtoInclude(100, typeof(MotionDto))]
 	[ProtoInclude(200, typeof(ColorChangedDto))]
-	[ProtoInclude(300, typeof(HandshakeDto))]
+	[ProtoInclude(300, typeof(PingDto))]
 	public class BaseDto { }
 	
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
@@ -21,7 +21,7 @@ namespace Shared
 	}
 
 	[ProtoContract(ImplicitFields = ImplicitFields.AllPublic)]
-	public class HandshakeDto : BaseDto
+	public class PingDto : BaseDto
 	{
 		public string Message { get; set; }
 	}

@@ -9,7 +9,7 @@ namespace Lightsaber
 		{
 			// The root page of your application
 			MainPage = new NavigationPage(new QrPage());
-			//MainPage = new NavigationPage(new LightSaberPage(null));
+			//MainPage = new NavigationPage(new MotionTestPage());
 		}
 
 		protected override void OnStart ()

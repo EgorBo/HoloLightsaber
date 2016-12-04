@@ -10,7 +10,7 @@ namespace Lightsaber.HoloLens
 	{
 		UdpSocketClient socketClient;
 		Dictionary<Type, Action<object>> callbacks = new Dictionary<Type, Action<object>>();
-		
+
 		public bool Connected { get; private set; }
 
 		public INetworkSerializer Serializer { get; set; }
@@ -27,7 +27,7 @@ namespace Lightsaber.HoloLens
 				socketClient.MessageReceived += SocketClient_MessageReceived;
 				Serializer = new ProtobufNetworkSerializer();
 				await socketClient.ConnectAsync(ip, port);
-				await socketClient.SendAsync(Serializer.Serialize(new HandshakeDto { Message = "Hello!" }));
+				StartSendingKeepAlive();
 				Connected = true;
 			}
 			catch (Exception)
@@ -35,6 +35,15 @@ namespace Lightsaber.HoloLens
 				return false;
 			}
 			return true;
+		}
+
+		async void StartSendingKeepAlive()
+		{
+			while (true)
+			{
+				await socketClient.SendAsync(Serializer.Serialize(new PingDto { Message = "Ping!" }));
+				await Task.Delay(2000).ConfigureAwait(false);
+			}
 		}
 
 		void SocketClient_MessageReceived(object sender, Sockets.Plugin.Abstractions.UdpSocketMessageReceivedEventArgs e)

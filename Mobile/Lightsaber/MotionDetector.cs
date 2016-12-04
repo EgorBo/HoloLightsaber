@@ -19,7 +19,6 @@ namespace Lightsaber
 			while (true)
 			{
 				await Task.Delay(16);
-
 				var view = new float[16];
 				headTracker.GetLastHeadView(view, 0);
 				var m4 = new Matrix4(
@@ -28,7 +27,7 @@ namespace Lightsaber
 					view[8], view[9], view[10], view[11],
 					view[12], view[13], view[14], view[15]);
 				var rot = m4.Rotation;
-				listener(new Vector3Dto(rot.PitchAngle, rot.YawAngle, 0));
+				listener(new Vector3Dto(-rot.PitchAngle - 90, rot.YawAngle, 0));
 			}
 		}
 	}

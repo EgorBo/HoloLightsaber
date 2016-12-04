@@ -27,7 +27,7 @@ namespace Lightsaber
 					remotePort = e.RemotePort;
 
 					var dto = Serializer.Deserialize<BaseDto>(e.ByteData);
-					var handshakeDto = dto as HandshakeDto;
+					var handshakeDto = dto as PingDto;
 					if (handshakeDto != null)
 					{
 						var msg = handshakeDto.Message;

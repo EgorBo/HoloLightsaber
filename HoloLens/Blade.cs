@@ -21,23 +21,25 @@ namespace Lightsaber.HoloLens
 			//float glowF = 10;
 			//bladeModel.GetMaterial(0).SetShaderParameter("MatDiffColor", new Color(c.R * glowF + 1, c.G * glowF + 1, c.B * glowF + 1));
 			glowModel.GetMaterial(0).SetShaderParameter("MatDiffColor", new Color(c, 0.4f));
-			Toggle();
+			Show();
 		}
 
-		public void Toggle()
+		public void Hide()
 		{
-			Active = !Active;
-			var to = new Vector3(1f, 1f, 7) / 1.75f;
 			bladeNode.Scale = new Vector3(1, 1, 0.1f) / 1.75f;
 			bladeNode.Position = new Vector3(0f, 0f, 0.6f);
-
-			if (Active)
-			{
-				bladeNode.RunActions(new ScaleTo(0.5f, to.X, to.Y, to.Z));
-				bladeNode.RunActions(new MoveTo(0.5f, new Vector3(0f, 0f, 2.5f)));
-			}
+			Active = false;
 		}
 
+		public void Show()
+		{
+			Hide();
+			var to = new Vector3(1f, 1f, 7) / 1.75f;
+			bladeNode.RunActions(new ScaleTo(0.5f, to.X, to.Y, to.Z));
+			bladeNode.RunActions(new MoveTo(0.5f, new Vector3(0f, 0f, 2.5f)));
+			Active = true;
+		}
+		
 		public override void OnAttachedToNode(Node node)
 		{
 			base.OnAttachedToNode(node);
