@@ -41,7 +41,7 @@ namespace Lightsaber
 					{
 						TextColor = Color.Black,
 						HorizontalTextAlignment = TextAlignment.Center,
-						Text = $"Open Lightsaber for HoloLens companion app and\nscan this qr code in order to be connected ({ip}):"
+						Text = $"Waiting for the HoloLens ({ip}):"
 					},
 					barcode,
 				}

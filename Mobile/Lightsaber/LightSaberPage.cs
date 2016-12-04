@@ -30,13 +30,18 @@ namespace Lightsaber
 			blueBt.HorizontalOptions = LayoutOptions.FillAndExpand;
 			blueBt.BackgroundColor = Color.Blue;
 
+			Button purpleBt = new Button();
+			purpleBt.Clicked += OnColorClick;
+			purpleBt.HorizontalOptions = LayoutOptions.FillAndExpand;
+			purpleBt.BackgroundColor = Color.Purple;
+
 			StackLayout hStack = new StackLayout
 				{
 					Orientation = StackOrientation.Horizontal,
 					HorizontalOptions = LayoutOptions.FillAndExpand,
 					VerticalOptions = LayoutOptions.Center,
 					HeightRequest = 200,
-					Children = { redBt, greenBt, blueBt }
+					Children = { redBt, greenBt, blueBt, purpleBt }
 				};
 
 			Content = hStack;
